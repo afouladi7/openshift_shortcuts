@@ -1,0 +1,1 @@
+# openshfit_shortcuts
