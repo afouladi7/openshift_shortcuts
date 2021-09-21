@@ -1,6 +1,9 @@
-echo "Please enter your pull secret from cloud.redhat.com/openshift/install in a file called pull.txt"
+#!/bin/bash
 
-sleep 5
+if [ ! -f pull.txt ]
+then
+	echo "Please enter your pull secret from cloud.redhat.com/openshift/install in a file called pull.txt"; exit
+fi
 
 key=""
 
@@ -9,8 +12,6 @@ read -p "Please enter your sshkey public key: (if blank will assume to use id_rs
 if [ -z "$key" ]
 then
 	key=$(<~/.ssh/id_rsa.pub)
-else
-	break
 fi
 
 pull=$(<pull.txt)
