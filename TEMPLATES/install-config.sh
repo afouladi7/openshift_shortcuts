@@ -1,6 +1,18 @@
 echo "Please enter your pull secret from cloud.redhat.com/openshift/install in a file called pull.txt"
+
 sleep 5
-read -p "Please enter your sshkey public key: " key
+
+key=""
+
+read -p "Please enter your sshkey public key: (if blank will assume to use id_rsa.pub in .ssh folder): " key
+
+if [ -z "$key" ]
+then
+	key=$(<~/.ssh/id_rsa.pub)
+else
+	break
+fi
+
 pull=$(<pull.txt)
 
 cat << EOF > ./install-config.yaml
