@@ -1,5 +1,12 @@
 #!/bin/bash
 
+###########################
+## This is for creating  ##
+## namespaces in OCP.    ##
+##                       ##
+## Author: Allen Fouladi ##
+###########################
+
 while true; do
     read -p "Do you wish to create mulitple namespace? " yn
     case $yn in

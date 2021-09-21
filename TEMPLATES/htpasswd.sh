@@ -1,5 +1,12 @@
 #!/bin/bash
 
+###########################
+## This is for creating  ##
+## users in OCP.         ##
+##                       ##
+## Author: Allen Fouladi ##
+###########################
+
 read -p 'What is your desired amount of Openshift users? ' user
 read -p 'What would you like to name your OAuth? ' oauth
 

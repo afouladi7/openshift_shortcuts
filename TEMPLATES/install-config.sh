@@ -1,5 +1,13 @@
 #!/bin/bash
 
+###########################
+## This is for a AWS     ##
+## installation of OCP.  ##
+##                       ##
+## Author: Allen Fouladi ##
+###########################
+
+
 if [ ! -f pull.txt ]
 then
 	echo "Please enter your pull secret from cloud.redhat.com/openshift/install in a file called pull.txt"; exit
