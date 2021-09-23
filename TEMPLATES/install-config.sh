@@ -24,9 +24,11 @@ fi
 
 pull=$(<pull.txt)
 
+read -p "Please enter your base domain name from Route 53: " r53
+
 cat << EOF > ./install-config.yaml
 apiVersion: v1
-baseDomain: allenfouladi.com
+baseDomain: $r53
 compute:
 - architecture: amd64
   hyperthreading: Enabled 
