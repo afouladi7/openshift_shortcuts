@@ -40,7 +40,7 @@ spec:
 EOF
 
 while true; do
-    read -p "Do you wish to create admin for users? " yn
+    read -p 'Do you wish to create admin account? ' yn
     case $yn in
         [Yy]* ) oc adm policy add-cluster-role-to-user admin user1
         htpasswd -B -b users.htpasswd user1 admin
