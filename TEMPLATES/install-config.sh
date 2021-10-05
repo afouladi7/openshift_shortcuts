@@ -76,6 +76,9 @@ networking:
 platform:
   aws:
     region: us-east-1
+    userTags:
+      startup: True
+      shutdown: True
 publish: External
 pullSecret: '$pull'
 sshKey: |
