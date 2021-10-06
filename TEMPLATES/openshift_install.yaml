@@ -32,4 +32,4 @@
     shell: 'oc apply -f https://raw.githubusercontent.com/afouladi7/acm/main/templates/multiclusterhub.yaml'
     
   - name: Deploy 1TB EBS Volumes for OCS
-    shell: 'oc apply -f '    
+    shell: 'oc apply -f https://raw.githubusercontent.com/afouladi7/openshift_shortcuts/main/TEMPLATES/storagecluster.yaml'    
