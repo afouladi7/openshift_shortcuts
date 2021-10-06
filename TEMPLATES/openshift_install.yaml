@@ -19,6 +19,9 @@
 
   - name: Deploy ACM
     shell: 'oc apply -f https://raw.githubusercontent.com/afouladi7/acm/main/templates/acm-deploy.yaml'
+    
+  - name: Deploy OCS
+    shell: 'oc apply -f https://raw.githubusercontent.com/afouladi7/openshift_shortcuts/main/TEMPLATES/ocs-deploy.yaml'
 
   - name: Sleep for 120 seconds and continue with play
     wait_for:
@@ -27,5 +30,6 @@
 
   - name: Deploy MultiClusterHub
     shell: 'oc apply -f https://raw.githubusercontent.com/afouladi7/acm/main/templates/multiclusterhub.yaml'
-
-
+    
+  - name: Deploy 1TB EBS Volumes for OCS
+    shell: 'oc apply -f '    
