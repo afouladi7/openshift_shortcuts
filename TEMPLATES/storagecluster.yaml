@@ -2,10 +2,23 @@ apiVersion: ocs.openshift.io/v1
 kind: StorageCluster
 metadata:
   name: ocs-storagecluster
+  generation: 2
   namespace: openshift-storage
   finalizers:
     - storagecluster.ocs.openshift.io
 spec:
+  arbiter: {}
+  encryption:
+    kms: {}
+  externalStorage: {}
+  managedResources:
+    cephBlockPools: {}
+    cephConfig: {}
+    cephDashboard: {}
+    cephFilesystems: {}
+    cephObjectStoreUsers: {}
+    cephObjectStores: {}
+  nodeTopologies: {}
   storageDeviceSets:
     - config: {}
       resources: {}
@@ -25,4 +38,5 @@ spec:
       count: 1
       replica: 3
       portable: true
+      preparePlacement: {}
   version: 4.8.0
