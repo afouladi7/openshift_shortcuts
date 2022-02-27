@@ -21,6 +21,7 @@ else
 fi
 done
 
+htpasswd -B -b users.htpasswd clusteradmin openshift
 oc adm policy add-cluster-role-to-user cluster-admin clusteradmin > /dev/null
 oc create secret generic htpass-secret --from-file=htpasswd=users.htpasswd -n openshift-config
 
