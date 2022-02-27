@@ -25,7 +25,7 @@ read -p "What should you like to name you single namespace? " ns
     spec: {}
 EOF
 done; break;;
-        [Nn]* ) read -p "What should you like to name you single namespace? " ns
+        [Nn]* ) read -p "What should you like to name your single namespace? " ns
         oc create ns $ns; break;;
         * ) echo "Please answer yes or no.";;
     esac
