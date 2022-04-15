@@ -41,14 +41,14 @@ sudo chown -R $USER /opt/registry
 
 #Next we will create a certificate for our registry to use
 cd /opt/registry/certs
-openssl req -newkey rsa:4096 -nodes -sha256 -keyout domain.key -x509 -days 365 -out domain.crt
+openssl req -newkey rsa:4096 -nodes -sha256 -keyout domain.key -x509 -days 365 -addext "subjectAltName = DNS:<localhost>" -out domain.crt
 #Country Name (2 letter code) [XX]:US
 #State or Province Name (full name) []: Colorado
 #Locality Name (eg, city) [Default City]:Colorado Springs
 #Organization Name (eg, company) [Default Company Ltd]:Lockheed
 #Organizational Unit Name (eg, section) []:C2
 #Common Name (eg, your name or your server's hostname) []:utility.dota-lab.iad.redhat.com
-#Email Address []:<your-email-address>pkramp@redhat.com
+#Email Address []:<your-email-address>test@redhat.com
 
 #The common name is the one that matters the rest of these can be pretty much any value but the common name must be the correct name for your machine in order for the certificate to properly resolve
 
