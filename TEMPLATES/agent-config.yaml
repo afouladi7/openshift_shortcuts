@@ -1,0 +1,67 @@
+apiVersion: v1beta1
+kind: AgentConfig
+metadata:
+#same name as the cluster in install-config.yaml
+  name: sno-cluster
+# All fields are optional
+rendezvousIP: {{ static_ip_of_box }} 
+hosts:
+# If a host is listed, then at least one interface
+# needs to be specified.
+- hostname: master-sno
+  role: master
+  # MAC Addresses of the NIC 
+  rootDeviceHints:
+    deviceName: /dev/sda
+  # interfaces are used to identify the host to apply this configuration to
+  interfaces:
+    - macAddress: {{ mac_address_1 }}
+      name: eth0
+    - macAddress: {{ mac_address_2 }}
+      name: eth1
+    - macAddress: {{ mac_address_3 }}
+      name: eth2
+    - macAddress: {{ mac_address_4 }}
+      name: eth3
+  # networkConfig contains the network configuration for the host in NMState format.
+  networkConfig:
+    interfaces:
+      - name: eth0
+        type: ethernet
+        state: up
+        mac-address: {{ mac_address_1 }}
+        ipv4:
+          enabled: true
+          address:
+          #static IP of the box
+            - ip: {{ static_ip_of_box }}
+              prefix-length: 24
+          dhcp: false
+      - name: eth1
+        type: ethernet
+        state: down
+        mac-address: {{ mac_address_2 }}
+        ipv4:
+          enable: false
+      - name: eth2
+        type: ethernet
+        state: down
+        mac-address: {{ mac_address_3 }}
+        ipv4:
+          enable: false
+      - name: eth3
+        type: ethernet
+        state: down
+        mac-address: {{ mac_address_4 }}
+        ipv4:
+          enable: false
+    dns-resolver:
+      config:
+        server: 
+           - {{ router_ip }}
+    routes:
+      config:
+        - destination: 0.0.0.0/0
+          next-hop-address: same as {{ router_ip }} but change last digit #some non routeable IP
+          next-hop-interface: eth0
+          table-id: 254
