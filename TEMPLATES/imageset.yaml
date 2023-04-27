@@ -1,0 +1,46 @@
+apiVersion: mirror.openshift.io/v1alpha2
+kind: ImageSetConfiguration
+archiveSize: 4
+storageConfig:                                                      
+  registry:
+    imageURL: {{ url_disconnected_registry }}:5000/mirror/oc-mirror-metadata
+    skipTLS: false
+mirror:
+  platform:
+    architectures:
+      - amd64
+    channels:
+      - name: stable-4.12
+        type: ocp
+        minVersion: 4.12.10
+        maxVersion: 4.12.10
+    graph: true
+  operators:
+    - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.12
+      packages:
+        - name: kubernetes-nmstate-operator
+                   - name: elasticsearch-operator
+                   - name: kubevirt-hyperconverged
+                   - name: container-security-operator
+                   - name: sriov-network-operator
+                   - name: odf-csi-addons-operator
+                   - name: node-maintenance-operator
+                   - name: compliance-operator
+                   - name: file-integrity-operator
+                   - name: odf-multicluster-orchestrator
+                   - name: odf-operator
+                   - name: quay-operator
+                   - name: local-storage-operator
+                   - name: ocs-operator
+                   - name: odf-operator
+                   - name: mcg-operator
+                   - name: odf-csi-addons-operator
+                   - name: lvms-operator
+                   - name: odr-cluster-operator
+                   - name: odr-hub-operator 
+                   - name: advanced-cluster-management
+                   - name: compliance-operator
+  additionalImages:
+  - name: registry.redhat.io/ubi8/ubi:latest
+  - name: registry.redhat.io/rhel8/support-tools
+  - name: registry.redhat.io/openshift4/ose-must-gather:latest
