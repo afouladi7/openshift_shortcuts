@@ -10,7 +10,7 @@ read -p "Mirror address/location? Please include port# " mirror
 
 echo "This is only mirroring the containers for " $release
 
-wget -q https://mirror.openshift.com/pub/openshift-v7/clients/ocp/$release/release.txt
+wget -q https://mirror.openshift.com/pub/openshift-v4/clients/ocp/$release/release.txt
 
 for i in $(cat release.txt | grep ocp-v4.0-art-dev | awk '{print$2}')
 do
