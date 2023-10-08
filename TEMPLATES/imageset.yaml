@@ -12,35 +12,64 @@ mirror:
     channels:
       - name: stable-4.12
         type: ocp
-        minVersion: 4.12.10
-        maxVersion: 4.12.10
+        minVersion: 4.12.28
+        maxVersion: 4.12.28        
     graph: true
   operators:
     - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.12
       packages:
+        - name: compliance-operator
+          channels:
+            - name: stable
+        - name: container-security-operator
+          channels:
+            - name: stable-3.9
+        - name: file-integrity-operator
+          channels:
+            - name: stable  
+        - name: local-storage-operator
+          channels:
+            - name: stable  
+        - name: ocs-operator
+          channels:
+            - name: stable-4.12
+        - name: odf-operator
+          channels:
+            - name: stable-4.12
+        - name: cluster-logging
+          channels:
+            - name: stable
+        - name: elasticsearch-operator
+          channels:
+            - name: stable
+        - name: redhat-oadp-operator
+          channels:
+            - name: stable-1.2
+        - name: rhsso-operator
+          channels:
+            - name: stable
+        - name: self-node-remediation
+          channels:
+            - name: stable
+        - name: web-terminal
+          channels:
+            - name: fast
+        - name: devspaces
+          channels:
+            - name: stable
+        - name: advanced-cluster-management
+          channels:
+            - name: release-2.8
+        - name: rhacs-operator
+          channels:
+            - name: stable
+        - name: lvms-operator
+        - name: odf-multicluster-orchestrator
+        - name: odf-operator
+        - name: quay-operator
+        - name: odf-csi-addons-operator
         - name: kubernetes-nmstate-operator
-                   - name: elasticsearch-operator
-                   - name: kubevirt-hyperconverged
-                   - name: container-security-operator
-                   - name: sriov-network-operator
-                   - name: odf-csi-addons-operator
-                   - name: node-maintenance-operator
-                   - name: compliance-operator
-                   - name: file-integrity-operator
-                   - name: odf-multicluster-orchestrator
-                   - name: odf-operator
-                   - name: quay-operator
-                   - name: local-storage-operator
-                   - name: ocs-operator
-                   - name: odf-operator
-                   - name: mcg-operator
-                   - name: odf-csi-addons-operator
-                   - name: lvms-operator
-                   - name: odr-cluster-operator
-                   - name: odr-hub-operator 
-                   - name: advanced-cluster-management
-                   - name: compliance-operator
   additionalImages:
-  - name: registry.redhat.io/ubi8/ubi:latest
-  - name: registry.redhat.io/rhel8/support-tools
-  - name: registry.redhat.io/openshift4/ose-must-gather:latest
+    - name: registry.redhat.io/ubi8/ubi:latest
+    - name: registry.redhat.io/rhel8/support-tools
+    - name: registry.redhat.io/openshift4/ose-must-gather:latest
