@@ -1,0 +1,172 @@
+---
+- name: Setup Enivornment for Disconnected Mirror
+  hosts: localhost
+  gather_facts: False
+  vars:
+    - common_name: localhost
+  tasks:
+    - name: Check if the file exists
+      stat:
+        path: ocp_pullsecret.json
+      register: file_stat
+
+    - name: Fail if the file does not exist
+      fail:
+        msg: "Red Hat Pull Secret does not exist, please save it as ocp_pullsecret.json"
+      when: not file_stat.stat.exists
+  
+    - name: Install a list of packages
+      yum:
+        name: "{{ packages }}"
+      vars:
+        packages:
+        - tree
+        - skopeo
+        - podman
+        - jq
+        - wget
+        - httpd-tools
+        - httpd
+        - python3-pip
+
+    ### Comment this selection and line 116-122 out if you are running older version of RHEL and you are running onto setuptools/pkg_resources issues, uncomment line 124-126
+    - name: Install pexpect
+      pip:
+        name: "{{ packages }}"
+        executable: pip3
+      vars:
+        packages:
+        - passlib
+    
+    - name: Pull latest OpenShift CLI
+      ansible.builtin.unarchive:
+        src: https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/openshift-client-linux.tar.gz
+        dest: /usr/bin/
+        remote_src: yes
+
+    - name: Pull latest OpenShift Installer
+      ansible.builtin.unarchive:
+        src: https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/openshift-install-linux.tar.gz
+        dest: /usr/bin/
+        remote_src: yes
+
+    - name: Pull latest OpenShift Installer Mirroring Tool
+      ansible.builtin.unarchive:
+        src: https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/oc-mirror.tar.gz
+        dest: /usr/bin/
+        remote_src: yes
+
+    - name: Make these cli tools executable
+      ansible.builtin.file:
+        path: /usr/bin/{{ item }}
+        mode: +x
+      loop:
+        - openshift-install
+        - oc-mirror
+
+    - name: Lets test a normal UBI and see if we run into fapolicy issues
+      containers.podman.podman_container:
+        name: ubi8.4
+        image: ubi8/ubi:8.4
+        command:
+          - ls
+
+    - name: Create a directory for the podman mirror registry
+      ansible.builtin.file:
+        path: /opt/registry
+        state: directory
+        mode: '0755'
+
+    - name: Create a directory for the podman mirror registry
+      ansible.builtin.file:
+        path: /opt/registry/{{ item }}
+        state: directory
+        mode: '0755'
+      loop:
+        - auth
+        - certs
+        - data
+
+    - name: Create a directory for the podman mirror registry
+      ansible.builtin.file:
+        path: ~/.docker
+        state: directory
+
+    - name: Create key and cert for mirror registry
+      command: openssl req -newkey rsa:4096 -nodes -sha256 -keyout /opt/registry/certs/domain.key -x509 -days 365 -subj "/C={{ country }}/ST={{ state }}/O={{ org_name }}/OU={{ unit_name }}/CN={{ common_name }}/emailAddress={{ email }}" -addext 'subjectAltName = DNS:"{{ common_name }}' -out /opt/registry/certs/domain.crt
+      vars:
+        country: US
+        state: Narnia
+        city: CityOfNarnia
+        org_name: Red Hat
+        unit_name: SSA
+        common_name: localhost
+        email: ilovespamemails@redhat.com
+
+    - name: Copy cert to ca-trust
+      ansible.builtin.copy:
+        src: /opt/registry/certs/domain.crt
+        dest: /etc/pki/ca-trust/source/anchors/domain.crt
+
+    - name: Update ca-trust
+      become: true
+      ansible.builtin.shell: update-ca-trust
+
+    ### Comment if you ran into an issue above from the pip install 
+    - name: Create username and password for mirror registry
+      community.general.htpasswd:
+        path: /opt/registry/auth/htpasswd
+        name: openshift
+        password: redhat
+        crypt_scheme: bcrypt
+        state: present
+
+    # - name: If using an older version of RHEL or Python we will create the htpasswd the old fashioned way
+    #   ansible.builtin.shell:
+    #     cmd: htpasswd -bBc /opt/registry/auth/htpasswd openshift redhat       
+
+    - name:  We can setup our registry to run, use the password and certificate we created and automaticatlly start in case the vm ever restarts
+      containers.podman.podman_container:
+        name: mirror-registry
+        ports: "5000:5000"
+        restart_policy: always
+        volumes:
+          - "/opt/registry/data:/var/lib/registry:z"
+          - "/opt/registry/auth:/auth:z"
+          - "/opt/registry/certs:/certs:z"
+        env:
+          REGISTRY_AUTH: htpasswd
+          REGISTRY_AUTH_HTPASSWD_REALM: Registry Realm
+          REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
+          REGISTRY_HTTP_TLS_CERTIFICATE: /certs/domain.crt
+          REGISTRY_HTTP_TLS_KEY: /certs/domain.key
+        image: docker.io/library/registry:2
+
+    # - name: curl to see if the registry is working
+    #   ansible.builtin.uri:
+    #     url: https://"{{ common_name }}:5000/v2/_catalog"
+    #     user: openshift
+    #     password: redhat
+    #     force_basic_auth: true
+    #     status_code: 201
+
+    - name: Restart the mirror registry
+      containers.podman.podman_container:
+        name: mirror-registry
+        state: started
+        restart: true
+
+    - name: Login to mirror registry and create ${XDG_RUNTIME_DIR}/containers/auth.json
+      containers.podman.podman_login:
+        username: openshift
+        password: redhat
+        registry: "{{ common_name }}:5000"
+
+    - name: Lets merge these pull secrets, Red Hat pull secret and Mirror authfile
+      ansible.builtin.shell:
+        cmd: jq -c --argjson var "$(jq .auths /run/containers/0/auth.json)" '.auths += $var' ocp_pullsecret.json > ~/.docker/config.json
+
+    - name: Download imageset.yaml - located at /tmp/imageset.yaml
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/afouladi7/openshift_shortcuts/main/TEMPLATES/imageset.yaml
+        dest: /tmp/imageset.yaml
