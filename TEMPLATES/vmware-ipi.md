@@ -253,3 +253,13 @@ INFO Time elapsed: 26m51s
 
 
 ```
+
+``` bash
+
+govc datastore.upload -ds ISOs agent.x86_64.iso agent.x86_64.iso
+
+govc vm.create -iso=agent.x86_64.iso -iso-datastore=ISOs -ds=rhdata6-nfs -net="airgap-VLAN999" -c=8 -m=16384 -disk=200GB -on=false -net.address=00:50:56:82:8c:dc dcds-master-0
+govc vm.create -iso=agent.x86_64.iso -iso-datastore=ISOs -ds=rhdata6-nfs -net="airgap-VLAN999" -c=8 -m=16384 -disk=200GB -on=false -net.address=00:50:56:82:8c:dd dcds-master-1
+govc vm.create -iso=agent.x86_64.iso -iso-datastore=ISOs -ds=rhdata6-nfs -net="airgap-VLAN999" -c=8 -m=16384 -disk=200GB -on=false -net.address=00:50:56:82:8c:de dcds-master-2
+
+```
