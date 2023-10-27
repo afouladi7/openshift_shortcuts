@@ -12,8 +12,8 @@ mirror:
     channels:
       - name: stable-4.12
         type: ocp
-        minVersion: 4.12.28
-        maxVersion: 4.12.28        
+        minVersion: 4.12.39
+        maxVersion: 4.12.39
     graph: true
   operators:
     - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.12
@@ -64,11 +64,38 @@ mirror:
           channels:
             - name: stable
         - name: lvms-operator
+          channels:
+            - name: stable-4.12
         - name: odf-multicluster-orchestrator
+          channels:
+            - name: stable-4.12
         - name: odf-operator
+          channels:
+            - name: stable-4.12
         - name: quay-operator
-        - name: odf-csi-addons-operator
+          channels:
+            - name: stable-3.9
+        - name: quay-bridge-operator
+          channels:
+            - name: stable-3.9
+        - name: openshift-pipelines-operator-rh
+          channels:
+            - name: latest
+        - name: openshift-gitops-operator
+          channels:
+            - name: latest
         - name: kubernetes-nmstate-operator
+        - name: mta-operator
+          channels:
+            - name: stable-v6.2
+        - name: mtv-operator
+          channels:
+            - name: release-v2.5
+    - catalog: registry.redhat.io/redhat/certified-operator-index:v4.12
+      packages:
+        - name: elasticsearch-eck-operator-certified
+        - name: nvidia-network-operator
+        - name: gpu-operator-certified
   additionalImages:
     - name: registry.redhat.io/ubi8/ubi:latest
     - name: registry.redhat.io/rhel8/support-tools
