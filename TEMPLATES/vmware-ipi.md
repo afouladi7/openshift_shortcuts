@@ -262,4 +262,5 @@ govc vm.create -iso=agent.x86_64.iso -iso-datastore=ISOs -ds=rhdata6-nfs -net="a
 govc vm.create -iso=agent.x86_64.iso -iso-datastore=ISOs -ds=rhdata6-nfs -net="airgap-VLAN999" -c=8 -m=16384 -disk=200GB -on=false -net.address=00:50:56:82:8c:dd dcds-master-1
 govc vm.create -iso=agent.x86_64.iso -iso-datastore=ISOs -ds=rhdata6-nfs -net="airgap-VLAN999" -c=8 -m=16384 -disk=200GB -on=false -net.address=00:50:56:82:8c:de dcds-master-2
 
+govc vm.change -e="disk.enableUUID=TRUE" -vm=dcds-master-{0..2}; govc vm.power -on dcds-master-{0..2}
 ```
