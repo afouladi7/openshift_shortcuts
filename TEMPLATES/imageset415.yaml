@@ -1,0 +1,63 @@
+kind: ImageSetConfiguration
+apiVersion: mirror.openshift.io/v1alpha2
+archiveSize: 4
+mirror:
+  platform:
+    architectures:
+      - amd64
+    channels:
+    - name: stable-4.15
+      type: ocp
+      minVersion: 4.15.12
+      maxVersion: 4.15.12
+    graph: true
+  operators:
+  - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.15
+    packages:
+      - name: kubevirt-hyperconverged
+        channels:
+          - name: stable
+      - name: kubernetes-nmstate-operator
+        channels:
+          - name: stable
+      - name: cincinnati-operator
+        channels:
+          - name: v1
+      - name: cluster-logging
+        channels:
+          - name: stable-5.8
+      - name: compliance-operator
+        channels:
+          - name: stable
+      - name: web-terminal
+        channels:
+          - name: fast
+      - name: file-integrity-operator
+        channels:
+          - name: stable
+      - name: lvms-operator
+        channels:
+          - name: stable-4.15
+      - name: odf-operator
+        channels:
+          - name: stable-4.15
+      - name: ocs-operator
+        channels:
+          - name: stable-4.15
+      - name: local-storage-operator
+        channels:
+          - name: stable
+      - name: mtv-operator
+        channels:
+          - name: release-v2.6
+      - name: nfd
+        channels:
+          - name: stable
+  additionalImages:
+  - name: registry.redhat.io/rhel9/rhel-guest-image:latest
+  - name: registry.redhat.io/rhel8/rhel-guest-image:latest
+  - name: registry.redhat.io/ubi8/ubi:latest
+  - name: registry.redhat.io/ubi9/ubi:latest
+  - name: registry.redhat.io/rhel8/support-tools
+  - name: registry.redhat.io/rhel9/support-tools
+  - name: registry.redhat.io/openshift4/ose-must-gather:latest
