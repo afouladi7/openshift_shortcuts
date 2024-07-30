@@ -16,4 +16,4 @@ Merge Secrets.
 
 Get all Operators lists from oc-mirror.
 
-`for i in $(oc-mirror list operators --catalogs --version=4.12 | grep registry); do $(oc-mirror list operators --catalog=$i --version=4.12 > $(echo $i | cut -b 27- | rev | cut -b 7- | rev).txt); done`
+`for i in $(oc-mirror list operators --catalogs --version=4.16 | grep registry); do $(oc-mirror list operators --catalog=$i --version=4.16 > $(echo $i | cut -b 27- | rev | cut -b 7- | rev).txt); done`
