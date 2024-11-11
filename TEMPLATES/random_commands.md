@@ -16,4 +16,12 @@ Merge Secrets.
 
 Get all Operators lists from oc-mirror.
 
-`for i in $(oc-mirror list operators --catalogs --version=4.16 | grep registry); do $(oc-mirror list operators --catalog=$i --version=4.16 > $(echo $i | cut -b 27- | rev | cut -b 7- | rev).txt); done`
+`for i in $(oc-mirror list operators --catalogs --version=4.17 | grep registry); do $(oc-mirror list operators --catalog=$i --version=4.17 > $(echo $i | cut -b 27- | rev | cut -b 7- | rev).txt); done`
+
+Cron Job for oc-mirror to pull daily
+
+```
+SHELL=/bin/bash
+
+0 12 * * * source /allen/ocp-sno/env.sh; /allen/ocp-sno/bin/oc-mirror --config /allen/ocp-sno/imageset.yaml docker://registry.<domain>.com:5000 --ignore-history; dir=$(tail /allen/.oc-mirror.log | grep UpdateService | awk {'print$5'}); export KUBECONFIG=/allen/kubeconfig; /allen/ocp-sno/bin/oc apply -f $dir
+```
