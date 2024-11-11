@@ -1,0 +1,78 @@
+kind: ImageSetConfiguration
+apiVersion: mirror.openshift.io/v1alpha2
+mirror:
+  platform:
+    architectures:
+      - amd64
+    channels:
+    - name: stable-4.17
+      type: ocp
+    graph: true
+  operators:
+  - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.17
+    packages:
+      - name: redhat-oadp-operator  #jcall
+        channels:
+          - name: stable-1.4
+      - name: mtc-operator  #jcall
+        channels:
+          - name: release-v1.8
+      - name: rhacs-operator
+        channels:
+          - name: stable
+      - name: kubevirt-hyperconverged
+        channels:
+          - name: stable
+      - name: kubernetes-nmstate-operator
+        channels:
+          - name: stable
+      - name: cincinnati-operator
+        channels:
+          - name: v1
+      - name: compliance-operator
+        channels:
+          - name: stable
+      - name: web-terminal
+        channels:
+          - name: fast
+      - name: file-integrity-operator
+        channels:
+          - name: stable
+      - name: lvms-operator
+        channels:
+          - name: stable-4.17
+      - name: odf-operator
+        channels:
+          - name: stable-4.17
+      - name: odf-csi-addons-operator
+        channels:
+          - name: stable-4.17
+      - name: ocs-operator
+        channels:
+          - name: stable-4.17
+      - name: mcg-operator
+        channels:
+          - name: stable-4.17
+      - name: local-storage-operator
+        channels:
+          - name: stable
+      - name: nfd
+        channels:
+          - name: stable
+  additionalImages:
+  - name: quay.io/jcall/vddk:latest
+  - name: registry.redhat.io/rhel9/rhel-guest-image:latest
+  - name: registry.redhat.io/rhel8/rhel-guest-image:latest
+  - name: registry.redhat.io/rhel8/support-tools
+  - name: registry.redhat.io/rhel9/support-tools
+  - name: registry.redhat.io/openshift4/ose-must-gather:latest
+  - name: registry.redhat.io/odf4/odf-must-gather-rhel9:v4.16
+  - name: registry.redhat.io/container-native-virtualization/cnv-must-gather-rhel9:v4.16
+
+  helm:
+    repositories:
+      - name: csi-driver-nfs
+        url: https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts
+        charts:
+          - name: csi-driver-nfs
+            version: 4.9.0
