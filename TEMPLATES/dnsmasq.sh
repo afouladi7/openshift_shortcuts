@@ -10,10 +10,11 @@ fi
 read -p "Enter the DHCP range (e.g., 192.168.1.100,192.168.1.200,12h): " DHCP_RANGE
 read -p "Enter the auth-zone (e.g., example.local): " AUTH_ZONE
 read -p "Enter the network interface to bind dnsmasq to (e.g., eth0): " INTERFACE
+read -p "Enter router and registry IP (e.g., 192.168.1.2): " IP 
 
 # Install dnsmasq
 echo "Installing dnsmasq..."
-dnf install -y dnsmasq
+yum install -y dnsmasq firewalld
 
 # Configure dnsmasq
 echo "Configuring dnsmasq..."
@@ -24,11 +25,12 @@ interface=$INTERFACE
 bind-interfaces
 
 domain=$AUTH_ZONE
+dhcp-option=option:router,$IP
 dhcp-range=$DHCP_RANGE
 local=/$AUTH_ZONE/
 
 # Additional static DNS record
-host-record=registry.$AUTH_ZONE,192.168.1.10
+host-record=registry.$AUTH_ZONE,$IP
 EOF
 
 # Restart and enable dnsmasq
@@ -47,4 +49,4 @@ echo "dnsmasq installation and configuration complete."
 echo "DHCP range: $DHCP_RANGE"
 echo "Auth-zone: $AUTH_ZONE"
 echo "Interface: $INTERFACE"
-echo "Static record added for registry.$AUTH_ZONE."
+echo "Static record added for registry.$AUTH_ZONE. -> $IP"
