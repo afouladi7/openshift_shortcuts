@@ -1,0 +1,42 @@
+##appliance-config.yaml
+apiVersion: v1beta1
+kind: ApplianceConfig
+ocpRelease:
+ version: 4.17.11
+ channel: stable
+diskSizeGB: 200
+pullSecret: '{"auths":{"cloud.openshift.com":{"auth":"pull_secret_here"}}}'
+sshKey: ssh-rsa 
+#userCorePass: openshift
+imageRegistry:
+enableDefaultSources: false
+stopLocalRegistry: false
+operators:
+  - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.17
+    packages:
+     - name: kubevirt-hyperconverged
+       channels:
+         - name: stable
+     - name: kubernetes-nmstate-operator
+       channels:
+         - name: stable
+     - name: cincinnati-operator
+       channels:
+         - name: v1
+     - name: compliance-operator
+       channels:
+         - name: stable
+     - name: odf-operator
+       channels:
+         - name: stable-4.17
+     - name: local-storage-operator
+       channels:
+         - name: stable
+     - name: nfd
+       channels:
+         - name: stable
+additionalImages:
+  - name: registry.redhat.io/rhel9/rhel-guest-image:latest
+  - name: registry.redhat.io/rhel8/rhel-guest-image:latest
+  - name: registry.redhat.io/rhel8/support-tools
+  - name: registry.redhat.io/rhel9/support-tools
