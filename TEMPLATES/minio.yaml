@@ -89,7 +89,7 @@ spec:
               subPath: minio
           terminationMessagePolicy: File
           image: >-
-            quay.io/minio/minio:RELEASE.2023-06-19T19-52-50Z
+            quay.io/minio/minio:latest
           args:
             - server
             - /data
