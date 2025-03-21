@@ -25,3 +25,9 @@ SHELL=/bin/bash
 
 0 12 * * * source /allen/ocp-sno/env.sh; /allen/ocp-sno/bin/oc-mirror --config /allen/ocp-sno/imageset.yaml docker://registry.<domain>.com:5000 --ignore-history; dir=$(tail /allen/.oc-mirror.log | grep UpdateService | awk {'print$5'}); export KUBECONFIG=/allen/kubeconfig; /allen/ocp-sno/bin/oc apply -f $dir
 ```
+
+OpenShift Audit to see who did whatever to VMs
+
+```
+{ log_type="audit" } | json | objectRef_resource ="virtualmachines", verb != "get", verb != "watch", verb != "patch", verb != "list", user_username !~ "system:serviceaccount:.*" | line_format `{{ if eq .verb "create" }} create {{ else if eq .verb "delete" }} delete {{else}} {{ .objectRef_subresource }} {{end}} {{ .objectRef_name }} ({{ .objectRef_namespace  }}) by {{ .user_username  }}`
+```
