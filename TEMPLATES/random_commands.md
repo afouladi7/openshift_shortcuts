@@ -31,3 +31,13 @@ OpenShift Audit to see who did whatever to VMs
 ```
 { log_type="audit" } | json | objectRef_resource ="virtualmachines", verb != "get", verb != "watch", verb != "patch", verb != "list", user_username !~ "system:serviceaccount:.*" | line_format `{{ if eq .verb "create" }} create {{ else if eq .verb "delete" }} delete {{else}} {{ .objectRef_subresource }} {{end}} {{ .objectRef_name }} ({{ .objectRef_namespace  }}) by {{ .user_username  }}`
 ```
+
+
+To approve all pending CSRs, run the following command:
+
+`$ oc get csr -o go-template='{{range .items}}{{if not .status}}{{.metadata.name}}{{"\n"}}{{end}}{{end}}' | xargs --no-run-if-empty oc adm certificate approve`
+
+
+Export KUBECONFIG from the node
+
+`export KUBECONFIG=$(find /etc -name *localhost.kubeconfig)`
