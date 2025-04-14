@@ -24,6 +24,9 @@ Cron Job for oc-mirror to pull daily
 SHELL=/bin/bash
 
 0 12 * * * source /allen/ocp-sno/env.sh; /allen/ocp-sno/bin/oc-mirror --config /allen/ocp-sno/imageset.yaml docker://registry.<domain>.com:5000 --ignore-history; dir=$(tail /allen/.oc-mirror.log | grep UpdateService | awk {'print$5'}); export KUBECONFIG=/allen/kubeconfig; /allen/ocp-sno/bin/oc apply -f $dir
+
+
+0 12 * * * source /root/ocp-sno/env.sh; /root/ocp-sno/bin/oc-mirror --config /root/ocp-sno/imageset4.17.yaml docker://registry.rhel8-mirror-stig.dota-lab.iad.redhat.com:5000 --ignore-history; dir=$(tail /root/.oc-mirror.log | grep UpdateService | awk {'print$5'}); export KUBECONFIG=/root/kubeconfig; /root/ocp-sno/bin/oc delete updateservices update-service-oc-mirror -n openshift-update-service; /root/ocp-sno/bin/oc apply -f $dir; /root/ocp-sno/bin/oc apply -f $dir/release-signatures; /root/ocp-sno/bin/oc apply -f $dir/updateService.yaml -n openshift-update-service
 ```
 
 OpenShift Audit to see who did whatever to VMs
