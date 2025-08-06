@@ -52,7 +52,7 @@ firewall-cmd --reload
 
 # Restart dnsmasq
 echo "Restarting dnsmasq..."
-systemctl start dnsmasq
+systemctl restart dnsmasq
 
 # Text that will be displayed to end user
 echo "dnsmasq installation and configuration complete."
