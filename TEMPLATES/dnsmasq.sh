@@ -38,6 +38,11 @@ echo "Starting dnsmasq..."
 systemctl start dnsmasq
 systemctl enable dnsmasq
 
+# Start and enable firewalld
+echo "Start firewalld..."
+systemctl start firewalld.service
+systemctl enable firewalld.service
+
 # Configure firewall
 echo "Configuring firewall rules..."
 firewall-cmd --add-service=dns --permanent
