@@ -8,7 +8,7 @@ fi
 
 # Prompt user for input
 read -p "Enter the DHCP range (e.g., 192.168.1.100,192.168.1.200,12h): " DHCP_RANGE
-read -p "Enter the auth-zone (e.g., example.local): " AUTH_ZONE
+read -p "Enter the auth-zone (e.g., example.local, afouladi7.redhat.com): " AUTH_ZONE
 read -p "Enter the network interface to bind dnsmasq to (e.g., eth0): " INTERFACE
 read -p "Enter router and registry IP (e.g., 192.168.1.2): " IP 
 
@@ -33,9 +33,9 @@ local=/$AUTH_ZONE/
 host-record=registry.$AUTH_ZONE,$IP
 EOF
 
-# Restart and enable dnsmasq
-echo "Restarting dnsmasq..."
-systemctl restart dnsmasq
+# Start and enable dnsmasq
+echo "Starting dnsmasq..."
+systemctl start dnsmasq
 systemctl enable dnsmasq
 
 # Configure firewall
@@ -45,6 +45,11 @@ firewall-cmd --add-service=dhcp --permanent
 firewall-cmd --add-interface=$INTERFACE --zone=trusted --permanent
 firewall-cmd --reload
 
+# Restart dnsmasq
+echo "Restarting dnsmasq..."
+systemctl start dnsmasq
+
+# Text that will be displayed to end user
 echo "dnsmasq installation and configuration complete."
 echo "DHCP range: $DHCP_RANGE"
 echo "Auth-zone: $AUTH_ZONE"
